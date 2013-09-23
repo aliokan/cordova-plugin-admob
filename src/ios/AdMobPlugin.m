@@ -58,7 +58,7 @@
                         @"Invalid publisher Id"];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
         return;
-    } else if (GADAdSizeEqualToSize(adSize, kGADAdSizeInvalid) && ![adSizeString isEqualToString:@"INTERSTITIAL"]) {
+    } else if (GADAdSizeEqualToSize(adSize, kGADAdSizeInvalid)) {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                          messageAsString:@"AdMobPlugin:"
                         @"Invalid ad size"];
@@ -71,13 +71,37 @@
     
     NSString *publisherId = [params objectForKey: @"publisherId"];
     
-    if([adSizeString isEqualToString:@"INTERSTITIAL"]){
-        [self createGADInterstitialWithPubId:publisherId];
-    } else{
-        [self createGADBannerViewWithPubId:publisherId
+    [self createGADBannerViewWithPubId:publisherId
                                 bannerType:adSize];
+    
+    // Call the success callback that was passed in through the javascript.
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+}
+
+// The javascript from the AdMob plugin calls this when createInterstitialView is
+// invoked. This method parses the arguments passed in.
+- (void)createInterstitialView:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult *pluginResult;
+    NSDictionary *params = [command argumentAtIndex:0];
+    NSString *callbackId = command.callbackId;
+    // We don't need positionAtTop to be set, but we need values for adSize and
+    // publisherId if we don't want to fail.
+    if (![params objectForKey: @"publisherId"]) {
+        // Call the error callback that was passed in through the javascript
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                         messageAsString:@"AdMobPlugin:"
+                        @"Invalid publisher Id"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+        return;
+    }
+    if ([params objectForKey: @"positionAtTop"]) {
+        positionAdAtTop_= [[params objectForKey: @"positionAtTop"] boolValue];
     }
     
+    NSString *publisherId = [params objectForKey: @"publisherId"];
+    
+    [self createGADInterstitialWithPubId:publisherId];
     
     // Call the success callback that was passed in through the javascript.
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];

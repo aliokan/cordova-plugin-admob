@@ -10,7 +10,7 @@
 
 #pragma mark AdMob Plugin
 
-// This version of the AdMob plugin has been tested with Cordova version 2.5.0.
+// This version of the AdMob plugin has been tested with Cordova version 3.0.0.
 @interface AdMobPlugin : CDVPlugin <GADBannerViewDelegate, GADInterstitialDelegate> {
  @private
   // Value set by the javascript to indicate whether the ad is to be positioned
@@ -22,6 +22,7 @@
 @property(nonatomic, retain) GADInterstitial *interstitial;
 
 - (void)createBannerView:(CDVInvokedUrlCommand *)command;
+- (void)createInterstitialView:(CDVInvokedUrlCommand *)command;
 - (void)requestAd:(CDVInvokedUrlCommand *)command;
 
 @end

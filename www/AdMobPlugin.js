@@ -14,7 +14,6 @@ var admob =  {
      * SMART_BANNER		url			Smart Banner			Phones and Tablets
      * https://developers.google.com/mobile-ads-sdk/docs/admob/smart-banners
      * 
-     * INTERSTITIAL https://developers.google.com/mobile-ads-sdk/docs/admob/advanced
      * @const
      */
     AD_SIZE : {
@@ -22,8 +21,7 @@ var admob =  {
         IAB_MRECT: "IAB_MRECT",
         IAB_BANNER: "IAB_BANNER",
         IAB_LEADERBOARD: "IAB_LEADERBOARD",
-        SMART_BANNER: "SMART_BANNER",
-        INTERSTITIAL: "INTERSTITIAL"
+        SMART_BANNER: "SMART_BANNER"
     },
     
      /**
@@ -78,6 +76,58 @@ var admob =  {
             'AdMobPlugin',
             'createBannerView',
             [{publisherId:defaults['publisherId'], adSize:defaults['adSize'], positionAtTop:defaults['positionAtTop']}]
+        );
+    }, 
+    
+    /**
+     * Creates a new AdMob interstitial view.
+     * https://developers.google.com/mobile-ads-sdk/docs/admob/advanced
+     * 
+     * @param {!Object} options The options used to create a banner.  They should
+     *        be specified similar to the following.
+     *
+     *        {
+     *          'publisherId': 'MY_PUBLISHER_ID'
+     *        }
+     *
+     *        publisherId is the publisher ID from your AdMob site, adSize
+     *        is one of the AdSize constants, and positionAtTop is a boolean to
+     *        determine whether to create the banner above or below the app content.
+     *        A publisher ID and AdSize are required.  The default for postionAtTop
+     *        is false, meaning the banner would be shown below the app content.
+     * @param {function()} successCallback The function to call if the banner was
+     *         created successfully.
+     * @param {function()} failureCallback The function to call if create banner
+     *         was unsuccessful.
+     */
+    createInterstitialView : function (options, successCallback, failureCallback) {
+        var defaults = {
+            'publisherId': undefined
+        };
+        var requiredOptions = ['publisherId'];
+        
+        // Merge optional settings into defaults.
+        for (var key in defaults) {
+            if (typeof options[key] !== 'undefined') {
+                defaults[key] = options[key];
+            }
+        }
+        
+        // Check for and merge required settings into defaults.
+        requiredOptions.forEach(function(key) {
+            if (typeof options[key] === 'undefined') {
+                failureCallback('Failed to specify key: ' + key + '.');
+                return;
+            }
+            defaults[key] = options[key];
+        });
+        
+        cordova.exec(
+            successCallback,
+            failureCallback,
+            'AdMobPlugin',
+            'createInterstitialView',
+            [{publisherId:defaults['publisherId']}]
         );
     }, 
     

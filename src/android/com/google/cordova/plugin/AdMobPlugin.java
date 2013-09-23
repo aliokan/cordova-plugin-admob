@@ -39,6 +39,7 @@ public class AdMobPlugin extends CordovaPlugin {
 
 	/** Cordova Actions. */
 	public static final String ACTION_CREATE_BANNER_VIEW = "createBannerView";
+	public static final String ACTION_CREATE_INTERSTITIAL_VIEW = "createInterstitialView";
 	public static final String ACTION_REQUEST_AD = "requestAd";
 
 	/**
@@ -62,6 +63,9 @@ public class AdMobPlugin extends CordovaPlugin {
 		if (ACTION_CREATE_BANNER_VIEW.equals(action)) {
 			executeCreateBannerView(inputs, callbackContext);
 			return true;
+		}else if (ACTION_CREATE_INTERSTITIAL_VIEW.equals(action)) {
+			executeCreateInterstitialView(inputs, callbackContext);
+			return true;
 		} else if (ACTION_REQUEST_AD.equals(action)) {
 			executeRequestAd(inputs, callbackContext);
 			return true;
@@ -84,8 +88,7 @@ public class AdMobPlugin extends CordovaPlugin {
 	 * @return A PluginResult representing whether or not the banner was created
 	 *         successfully.
 	 */
-	private void executeCreateBannerView(JSONArray inputs,
-			CallbackContext callbackContext) {
+	private void executeCreateBannerView(JSONArray inputs, CallbackContext callbackContext) {
 		String publisherId = "";
 		String size = "";
 
@@ -102,30 +105,8 @@ public class AdMobPlugin extends CordovaPlugin {
 							exception.getMessage()));
 			callbackContext.error(exception.getMessage());
 		}
-		if ("INTERSTITIAL".equals(size)) {
-			createInterstitialView(publisherId, callbackContext);
-		} else {
-			AdSize adSize = adSizeFromSize(size);
-			createBannerView(publisherId, adSize, callbackContext);
-		}
-	}
-
-	private synchronized void createInterstitialView(final String publisherId,
-			final CallbackContext callbackContext) {
-		final CordovaInterface cordova = this.cordova;
-
-		// Create the AdView on the UI thread.
-		Log.w(LOGTAG, "createInterstitialView");
-		Runnable runnable = new Runnable() {
-			public void run() {
-				intertitial = new DfpInterstitialAd(cordova.getActivity(),
-						publisherId);
-				intertitial.setAdListener(new BannerListener());
-				// Notify the plugin.
-				callbackContext.success();
-			}
-		};
-		this.cordova.getActivity().runOnUiThread(runnable);
+		AdSize adSize = adSizeFromSize(size);
+		createBannerView(publisherId, adSize, callbackContext);
 	}
 
 	private synchronized void createBannerView(final String publisherId,
@@ -157,6 +138,49 @@ public class AdMobPlugin extends CordovaPlugin {
 					// Notify the plugin.
 					callbackContext.success();
 				}
+			}
+		};
+		this.cordova.getActivity().runOnUiThread(runnable);
+	}
+	
+	/**
+	 * Parses the create banner view input parameters and runs the create banner
+	 * view action on the UI thread. If this request is successful, the
+	 * developer should make the requestAd call to request an ad for the banner.
+	 * 
+	 * @param inputs
+	 *            The JSONArray representing input parameters. This function
+	 *            expects the first object in the array to be a JSONObject with
+	 *            the input parameters.
+	 * @return A PluginResult representing whether or not the banner was created
+	 *         successfully.
+	 */
+	private void executeCreateInterstitialView(JSONArray inputs, CallbackContext callbackContext) {
+		String publisherId = "";
+
+		// Get the input data.
+		try {
+			JSONObject data = inputs.getJSONObject(0);
+			publisherId = data.getString("publisherId");
+			Log.w(LOGTAG, "executeCreateInterstitialView OK");
+		} catch (JSONException exception) {
+			Log.w(LOGTAG, String.format("Got JSON Exception: %s", exception.getMessage()));
+			callbackContext.error(exception.getMessage());
+		}
+		createInterstitialView(publisherId, callbackContext);
+	}
+
+	private synchronized void createInterstitialView(final String publisherId, final CallbackContext callbackContext) {
+		final CordovaInterface cordova = this.cordova;
+
+		// Create the AdView on the UI thread.
+		Log.w(LOGTAG, "createInterstitialView");
+		Runnable runnable = new Runnable() {
+			public void run() {
+				intertitial = new DfpInterstitialAd(cordova.getActivity(), publisherId);
+				intertitial.setAdListener(new BannerListener());
+				// Notify the plugin.
+				callbackContext.success();
 			}
 		};
 		this.cordova.getActivity().runOnUiThread(runnable);
