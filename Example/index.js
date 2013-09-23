@@ -50,39 +50,25 @@ var app = {
     }, 
     
     addBanner: function() {
-        var options;
         var successCreateBannerView = function() { console.log("addBanner Success"); admob.requestAd({'isTesting': true},success,error); };
         var success = function() { console.log("requestAd Success"); };
         var error = function(message) { console.log("Oopsie! " + message); };
         
-        if((navigator.userAgent.match(/Android/i)) == "Android"){
-            console.log('is Android ');
-            /* 
-            options = {
-                'publisherId': 'Ad unit ID',
-                'adSize': admob.AD_SIZE.INTERSTITIAL
-            }
-            //*/
-            options = {
-                'publisherId': 'Ad unit ID',
-                'adSize': admob.AD_SIZE.BANNER
-            }
-            //*/
-        } else
-        {
-            console.log('is iOS ');
-            /* 
-            options = {
-                'publisherId': 'Ad unit ID',
-                'adSize': admob.AD_SIZE.BANNER
-            }
-            //*/
-            options = {
-                'publisherId': 'Ad unit ID',
-                'adSize': admob.AD_SIZE.INTERSTITIAL
-            }
-            //*/
+        var options = {
+            'publisherId': 'Ad unit ID',
+            'adSize': admob.AD_SIZE.BANNER
         }
         admob.createBannerView(options,successCreateBannerView,error);
+    },
+    
+    addInterstitial: function() {
+        var successCreateBannerView = function() { console.log("addBanner Success"); admob.requestAd({'isTesting': true},success,error); };
+        var success = function() { console.log("requestAd Success"); };
+        var error = function(message) { console.log("Oopsie! " + message); };
+        
+        var options = {
+            'publisherId': 'Ad unit ID'
+        }
+        admob.createInterstitialView(options,successCreateBannerView,error);
     }
 };
