@@ -59,6 +59,16 @@ events are supported:
     document.addEventListener('onPresentScreen', callback);
     document.addEventListener('onLeaveApplication', callback);
 
+If you want to create an Interstitials sur `createInterstitialView`  
+             
+             admob.createInterstitialView(
+             {
+               'publisherId': 'INSERT_YOUR_PUBLISHER_ID_HERE'
+             },
+             successCallback,
+             failureCallback
+         );
+
 ##Implementation:
 
 Based on:  
