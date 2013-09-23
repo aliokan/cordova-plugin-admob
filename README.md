@@ -4,7 +4,8 @@ cordova-plugin-admob
 AdMob Phonegap Plugin for Android and iOS
 compatible Phonegap 3.0 CLI
 
-What is phonegap CLI ? http://docs.phonegap.com/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface  
+What is phonegap CLI ?  
+http://docs.phonegap.com/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface  
 How to install plugin whith phonegap CLI : 
 > phonegap local plugin add https://github.com/aliokan/cordova-plugin-admob
 
@@ -60,7 +61,7 @@ events are supported:
 
 ##Implementation:
 
-Based on: 
+Based on:  
 https://github.com/rajpara11/phonegap-plugins/tree/master/Android/AdMobPlugin  
 https://github.com/rajpara11/phonegap-plugins/tree/master/iOS/AdMobPlugin  
 with Interstitials support
