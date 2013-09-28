@@ -230,8 +230,7 @@
         return;
     }
     
-    UIDeviceOrientation currentOrientation =
-    [[UIDevice currentDevice] orientation];
+    UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
     // Handle changing Smart Banner constants for the user.
     BOOL adIsSmartBannerPortrait =
     GADAdSizeEqualToSize(self.bannerView.adSize,
@@ -385,6 +384,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
      name:UIDeviceOrientationDidChangeNotification
      object:nil];
     bannerView_.delegate = nil;
+    interstitial_.delegate = nil;
 }
 
 @end
