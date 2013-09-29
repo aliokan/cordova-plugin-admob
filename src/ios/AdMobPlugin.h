@@ -24,5 +24,6 @@
 - (void)createBannerView:(CDVInvokedUrlCommand *)command;
 - (void)createInterstitialView:(CDVInvokedUrlCommand *)command;
 - (void)requestAd:(CDVInvokedUrlCommand *)command;
+- (void)killAd:(CDVInvokedUrlCommand *)command;
 
 @end

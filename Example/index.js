@@ -62,7 +62,7 @@ var app = {
     },
     
     addInterstitial: function() {
-        var successCreateBannerView = function() { console.log("addBanner Success"); admob.requestAd({'isTesting': true},success,error); };
+        var successCreateBannerView = function() { console.log("addInterstitial Success"); admob.requestAd({'isTesting': true},success,error); };
         var success = function() { console.log("requestAd Success"); };
         var error = function(message) { console.log("Oopsie! " + message); };
         
@@ -70,5 +70,11 @@ var app = {
             'publisherId': 'Ad unit ID'
         }
         admob.createInterstitialView(options,successCreateBannerView,error);
+    },
+    
+    killAd: function() {
+        var success = function() { console.log("killAd Success"); };
+        var error = function(message) { console.log("Oopsie! " + message); };
+        admob.killAd(success,error);
     }
 };

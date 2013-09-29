@@ -41,6 +41,7 @@ public class AdMobPlugin extends CordovaPlugin {
 	public static final String ACTION_CREATE_BANNER_VIEW = "createBannerView";
 	public static final String ACTION_CREATE_INTERSTITIAL_VIEW = "createInterstitialView";
 	public static final String ACTION_REQUEST_AD = "requestAd";
+	public static final String KILL_AD = "killAd";
 
 	/**
 	 * This is the main method for the AdMob plugin. All API calls go through
@@ -63,11 +64,14 @@ public class AdMobPlugin extends CordovaPlugin {
 		if (ACTION_CREATE_BANNER_VIEW.equals(action)) {
 			executeCreateBannerView(inputs, callbackContext);
 			return true;
-		}else if (ACTION_CREATE_INTERSTITIAL_VIEW.equals(action)) {
+		} else if (ACTION_CREATE_INTERSTITIAL_VIEW.equals(action)) {
 			executeCreateInterstitialView(inputs, callbackContext);
 			return true;
 		} else if (ACTION_REQUEST_AD.equals(action)) {
 			executeRequestAd(inputs, callbackContext);
+			return true;
+		} else if (KILL_AD.equals(action)) {
+			executeKillAd(callbackContext);
 			return true;
 		} else {
 			Log.d(LOGTAG, String.format("Invalid action passed: %s", action));
@@ -336,6 +340,13 @@ public class AdMobPlugin extends CordovaPlugin {
 			}
 		};
 		this.cordova.getActivity().runOnUiThread(runnable);
+	}
+	
+	private void executeKillAd(CallbackContext callbackContext) {
+			adView.destroy();
+			adView = null;
+			// Notify the plugin.
+			callbackContext.success();
 	}
 
 	/**

@@ -72,7 +72,7 @@
     NSString *publisherId = [params objectForKey: @"publisherId"];
     
     [self createGADBannerViewWithPubId:publisherId
-                                bannerType:adSize];
+                            bannerType:adSize];
     
     // Call the success callback that was passed in through the javascript.
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
@@ -133,6 +133,36 @@
     [self requestAdWithTesting:isTesting
                         extras:extrasDictionary];
     
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+}
+
+- (void)killAd:(CDVInvokedUrlCommand *)command {
+    CDVPluginResult *pluginResult;
+    NSString *callbackId = command.callbackId;
+    if(self.bannerView) {
+        [self.bannerView setDelegate:nil];
+        [self.bannerView removeFromSuperview];
+        self.bannerView = nil;
+        // Frame of the main Cordova webview.
+        CGRect webViewFrame = self.webView.frame;
+        // Frame of the main container view that holds the Cordova webview.
+        CGRect superViewFrame = self.webView.superview.frame;
+        webViewFrame.size.height = superViewFrame.size.height;
+        self.webView.frame = webViewFrame;
+    } else if(self.interstitial){
+        //[self.interstitial setDelegate:nil];
+        //[self.interstitial removeFromSuperview];
+        //self.interstitial = nil;
+    } else {
+        // Try to prevent requestAd from being called without createBannerView first
+        // being called.
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                         messageAsString:@"AdMobPlugin:"
+                        @"No ad view exists"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+        return;
+    }
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }

@@ -174,6 +174,22 @@ var admob =  {
             'requestAd',
             [{isTesting:defaults['isTesting'], extras:defaults['extras']}]
         );
+    }, 
+    
+    
+    /**
+     * kill banner.
+     * @param {function()} successCallback The function to call if an ad was
+     *        requested successfully.
+     * @param {function()} failureCallback The function to call if an ad failed
+     *        to be requested.
+     */
+    killAd : function(successCallback, failureCallback) {
+        cordova.exec(
+            successCallback,
+            failureCallback,
+            'AdMobPlugin',
+                     'killAd',[{}]);
     }
     
 };

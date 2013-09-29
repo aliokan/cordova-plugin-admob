@@ -69,8 +69,9 @@ If you want to create an Interstitials sur `createInterstitialView`
              failureCallback
          );
 
-##Implementation:
-
+If you want Kill banner : 
+         admob.killAd(successCallback,failureCallback);
+         
 Based on:  
 https://github.com/rajpara11/phonegap-plugins/tree/master/Android/AdMobPlugin  
 https://github.com/rajpara11/phonegap-plugins/tree/master/iOS/AdMobPlugin  
