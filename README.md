@@ -53,23 +53,23 @@ There are two calls needed to get AdMob Ads:
 This plugin also allows you the option to listen for ad events.  The following
 events are supported:
 
-    document.addEventListener('onReceiveAd', callback);
-    document.addEventListener('onFailedToReceiveAd', callback);
-    document.addEventListener('onDismissScreen', callback);
-    document.addEventListener('onPresentScreen', callback);
-    document.addEventListener('onLeaveApplication', callback);
+         document.addEventListener('onReceiveAd', callback);
+         document.addEventListener('onFailedToReceiveAd', callback);
+         document.addEventListener('onDismissScreen', callback);
+         document.addEventListener('onPresentScreen', callback);
+         document.addEventListener('onLeaveApplication', callback);
 
 If you want to create an Interstitials sur `createInterstitialView`  
-             
-             admob.createInterstitialView(
-             {
-               'publisherId': 'INSERT_YOUR_PUBLISHER_ID_HERE'
-             },
-             successCallback,
-             failureCallback
-         );
 
-If you want Kill banner : 
+         admob.createInterstitialView(
+         {
+           'publisherId': 'INSERT_YOUR_PUBLISHER_ID_HERE'
+         },
+         successCallback,
+         failureCallback);
+
+If you want Kill banner :  
+
          admob.killAd(successCallback,failureCallback);
          
 Based on:  
