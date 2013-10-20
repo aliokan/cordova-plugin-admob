@@ -346,10 +346,24 @@ public class AdMobPlugin extends CordovaPlugin {
 	}
 	
 	private void executeKillAd(CallbackContext callbackContext) {
-			adView.destroy();
-			adView = null;
-			// Notify the plugin.
-			callbackContext.success();
+	        final Runnable runnable = new Runnable() {
+            		public void run() {
+                		if (adView == null) {
+                    		// Notify the plugin.
+                    			callbackContext.error("AdView is null.  Did you call createBannerView or already destroy it?");
+                		} else {
+                    			LinearLayoutSoftKeyboardDetect parentView = (LinearLayoutSoftKeyboardDetect) webView
+							.getParent();
+		                    parentView.removeView(adView);
+		                    adView.removeAllViews();
+		                    adView.destroy();
+		                    adView = null;
+		                    callbackContext.success();
+		                }
+	            	}
+	        };
+
+        	this.cordova.getActivity().runOnUiThread(runnable);
 	}
 
 	/**
