@@ -345,7 +345,7 @@ public class AdMobPlugin extends CordovaPlugin {
 		this.cordova.getActivity().runOnUiThread(runnable);
 	}
 	
-	private void executeKillAd(CallbackContext callbackContext) {
+	private void executeKillAd(final CallbackContext callbackContext) {
 	        final Runnable runnable = new Runnable() {
             		public void run() {
                 		if (adView == null) {
