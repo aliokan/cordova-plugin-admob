@@ -103,6 +103,9 @@ public class AdMobPlugin extends CordovaPlugin {
 			size = data.getString("adSize");
 			this.positionAtTop = data.getBoolean("positionAtTop");
 			Log.w(LOGTAG, "executeCreateBannerView OK");
+			Log.w(LOGTAG, "size: " + size);
+			Log.w(LOGTAG, "publisherId: " + publisherId);
+			Log.w(LOGTAG, "positionAtTop: " + (this.positionAtTop ? "true" : "false"));
 		} catch (JSONException exception) {
 			Log.w(LOGTAG,
 					String.format("Got JSON Exception: %s",
@@ -123,7 +126,7 @@ public class AdMobPlugin extends CordovaPlugin {
 			public void run() {
 				Log.w(LOGTAG, "run");
 				Log.w(LOGTAG, String.valueOf(webView));
-				Log.w(LOGTAG, "adSize::" + adSize);
+				// Log.w(LOGTAG, "adSize::" + adSize); calling adSize.toString() with SmartBanner == crash
 				if (adSize == null) {
 					callbackContext
 							.error("AdSize is null. Did you use an AdSize constant?");
@@ -343,10 +346,24 @@ public class AdMobPlugin extends CordovaPlugin {
 	}
 	
 	private void executeKillAd(CallbackContext callbackContext) {
-			adView.destroy();
-			adView = null;
-			// Notify the plugin.
-			callbackContext.success();
+	        final Runnable runnable = new Runnable() {
+            		public void run() {
+                		if (adView == null) {
+                    		// Notify the plugin.
+                    			callbackContext.error("AdView is null.  Did you call createBannerView or already destroy it?");
+                		} else {
+                    			LinearLayoutSoftKeyboardDetect parentView = (LinearLayoutSoftKeyboardDetect) webView
+							.getParent();
+		                    parentView.removeView(adView);
+		                    adView.removeAllViews();
+		                    adView.destroy();
+		                    adView = null;
+		                    callbackContext.success();
+		                }
+	            	}
+	        };
+
+        	this.cordova.getActivity().runOnUiThread(runnable);
 	}
 
 	/**
