@@ -413,6 +413,7 @@ public class AdMobPlugin extends CordovaPlugin {
 	public void onDestroy() {
 		if (adView != null) {
 			adView.destroy();
+			adView = null;
 		}
 		super.onDestroy();
 	}
