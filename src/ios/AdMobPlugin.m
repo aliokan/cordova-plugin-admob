@@ -49,6 +49,7 @@
     NSString *adSizeString = [params objectForKey:@"adSize"];
     GADAdSize adSize = [self GADAdSizeFromString:adSizeString];
     positionAdAtTop_ = NO;
+    positionFromTop_ = -1;
     // We don't need positionAtTop to be set, but we need values for adSize and
     // publisherId if we don't want to fail.
     if (![params objectForKey: @"publisherId"]) {
@@ -68,7 +69,10 @@
     if ([params objectForKey: @"positionAtTop"]) {
         positionAdAtTop_= [[params objectForKey: @"positionAtTop"] boolValue];
     }
-    
+    if ([params objectForKey: @"positionFromTop"]) {
+        positionFromTop_ = [[params objectForKey: @"positionFromTop"] intValue];
+    }
+  
     NSString *publisherId = [params objectForKey: @"publisherId"];
     
     [self createGADBannerViewWithPubId:publisherId
@@ -97,6 +101,9 @@
     }
     if ([params objectForKey: @"positionAtTop"]) {
         positionAdAtTop_= [[params objectForKey: @"positionAtTop"] boolValue];
+    }
+    if ([params objectForKey: @"positionFromTop"]) {
+        positionFromTop_ = [[params objectForKey: @"positionFromTop"] intValue];
     }
     
     NSString *publisherId = [params objectForKey: @"publisherId"];
@@ -286,46 +293,47 @@
     CGFloat yLocation = 0.0;
     CGFloat xLocation = 0.0;
     
-    if (positionAdAtTop_) {
+    if (positionFromTop_ > -1) {
+        yLocation = (double) positionFromTop_;
+    } else if (positionAdAtTop_) {
         // Move the webview underneath the ad banner.
         webViewFrame.origin.y = bannerViewFrame.size.height;
-        // Center the banner using the value of the origin.
-        if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
-            // The superView has not had its width and height updated yet so use those
-            // values for the x and y of the new origin respectively.
-            xLocation = (superViewFrame.size.height -
-                         bannerViewFrame.size.width) / 2.0;
-        } else {
-            xLocation = (superViewFrame.size.width -
-                         bannerViewFrame.size.width) / 2.0;
-        }
     } else {
         // Move the webview to the top of the screen.
         webViewFrame.origin.y = 0;
-        // Need to center the banner both horizontally and vertically.
+        // Sets the yLocation based on the orientation.
         if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
             yLocation = superViewFrame.size.width -
             bannerViewFrame.size.height;
-            xLocation = (superViewFrame.size.height -
-                         bannerViewFrame.size.width) / 2.0;
         } else {
             yLocation = superViewFrame.size.height -
             bannerViewFrame.size.height;
-            xLocation = (superViewFrame.size.width -
-                         bannerViewFrame.size.width) / 2.0;
         }
+    }
+    // Center the banner using the value of the origin.
+    if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
+        // The superView has not had its width and height updated yet so use those
+        // values for the x and y of the new origin respectively.
+        xLocation = (superViewFrame.size.height -
+                     bannerViewFrame.size.width) / 2.0;
+    } else {
+        xLocation = (superViewFrame.size.width -
+                     bannerViewFrame.size.width) / 2.0;
     }
     frame.origin = CGPointMake(xLocation, yLocation);
     bannerView_.frame = frame;
     
-    if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
-        // The super view's frame hasn't been updated so use its width
-        // as the height.
-        webViewFrame.size.height = superViewFrame.size.width -
-        bannerViewFrame.size.height;
-    } else {
-        webViewFrame.size.height = superViewFrame.size.height -
-        bannerViewFrame.size.height;
+    // The webViewFrame height is updated (but only if the adbanner is not shown as an overlay.
+    if (positionFromTop_ < 0) {
+        if (UIInterfaceOrientationIsLandscape(currentOrientation)) {
+            // The super view's frame hasn't been updated so use its width
+            // as the height.
+            webViewFrame.size.height = superViewFrame.size.width -
+            bannerViewFrame.size.height;
+        } else {
+            webViewFrame.size.height = superViewFrame.size.height -
+            bannerViewFrame.size.height;
+        }
     }
     self.webView.frame = webViewFrame;
 }

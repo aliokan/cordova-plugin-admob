@@ -11,6 +11,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.view.Gravity;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.google.ads.Ad;
 import com.google.ads.AdListener;
@@ -34,6 +39,9 @@ public class AdMobPlugin extends CordovaPlugin {
 	/** Whether or not the ad should be positioned at top or bottom of screen. */
 	private boolean positionAtTop;
 
+	/** Position of the top of the banner. It is shown as overlay. Takes precedence over positionAtTop. */
+	private int positionFromTop = -1;
+	
 	/** Common tag used for logging statements. */
 	private static final String LOGTAG = "AdMobPlugin";
 
@@ -102,6 +110,7 @@ public class AdMobPlugin extends CordovaPlugin {
 			publisherId = data.getString("publisherId");
 			size = data.getString("adSize");
 			this.positionAtTop = data.getBoolean("positionAtTop");
+			this.positionFromTop = data.getInt("positionFromTop");
 			Log.w(LOGTAG, "executeCreateBannerView OK");
 			Log.w(LOGTAG, "size: " + size);
 			Log.w(LOGTAG, "publisherId: " + publisherId);
@@ -132,12 +141,18 @@ public class AdMobPlugin extends CordovaPlugin {
 							.error("AdSize is null. Did you use an AdSize constant?");
 					return;
 				} else {
-					adView = new DfpAdView(cordova.getActivity(), adSize,
-							publisherId);
+					adView = new DfpAdView(cordova.getActivity(), adSize, publisherId);
 					adView.setAdListener(new BannerListener());
-					LinearLayoutSoftKeyboardDetect parentView = (LinearLayoutSoftKeyboardDetect) webView
-							.getParent();
-					if (positionAtTop) {
+					ViewGroup parentView = (ViewGroup) webView.getParent();
+					if (positionFromTop > -1) {
+						RelativeLayout.LayoutParams head_params = 
+								new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+										RelativeLayout.LayoutParams.WRAP_CONTENT);
+						head_params.setMargins(0, positionFromTop, 0, 0); //substitute parameters for left, top, right, bottom
+						adView.setLayoutParams(head_params);
+
+				        parentView.addView(adView, head_params);						
+					} else if (positionAtTop) {
 						parentView.addView(adView, 0);
 					} else {
 						parentView.addView(adView);
@@ -316,6 +331,8 @@ public class AdMobPlugin extends CordovaPlugin {
 						// on your
 						// device.
 						request.addTestDevice(AdRequest.TEST_EMULATOR);
+						request.addTestDevice("3CD69F76E57E27AB9B79E4BB1838172E");
+
 					}
 					AdMobAdapterExtras extras = new AdMobAdapterExtras();
 					Iterator<String> extrasIterator = inputExtras.keys();
@@ -334,7 +351,7 @@ public class AdMobPlugin extends CordovaPlugin {
 					}
 					if (inputValid) {
 						// extras.addExtra("cordova", 1);
-						// request.setNetworkExtras(extras);
+						request.setNetworkExtras(extras);
 						adView.loadAd(request);
 						// Notify the plugin.
 						callbackContext.success();
@@ -352,8 +369,7 @@ public class AdMobPlugin extends CordovaPlugin {
                     		// Notify the plugin.
                     			callbackContext.error("AdView is null.  Did you call createBannerView or already destroy it?");
                 		} else {
-                    			LinearLayoutSoftKeyboardDetect parentView = (LinearLayoutSoftKeyboardDetect) webView
-							.getParent();
+                    		ViewGroup parentView = (ViewGroup) webView.getParent();
 		                    parentView.removeView(adView);
 		                    adView.removeAllViews();
 		                    adView.destroy();
