@@ -16,6 +16,9 @@
   // Value set by the javascript to indicate whether the ad is to be positioned
   // at the top or bottom of the screen.
   BOOL positionAdAtTop_;
+  // Value set by the Javascript code, that signifies the position of the banner in pixels from
+  // the top. Note that this value has precedence over the positionAdAtTop_;
+  int positionFromTop_;
 }
 
 @property(nonatomic, retain) GADBannerView *bannerView;

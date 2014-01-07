@@ -33,7 +33,8 @@ var admob =  {
      *        {
      *          'publisherId': 'MY_PUBLISHER_ID',
      *          'adSize': AdMob.AD_SIZE.AD_SIZE_CONSTANT,
-     *          'positionAtTop': false
+     *          'positionAtTop': false,
+     *          'positionFromTop': 20,
      *        }
      *
      *        publisherId is the publisher ID from your AdMob site, adSize
@@ -41,6 +42,8 @@ var admob =  {
      *        determine whether to create the banner above or below the app content.
      *        A publisher ID and AdSize are required.  The default for postionAtTop
      *        is false, meaning the banner would be shown below the app content.
+     *        positionFromTop signifies the y coordinate of the banners top left corner. 
+     *        positionFromTop takes precedence over positionAtTop.
      * @param {function()} successCallback The function to call if the banner was
      *         created successfully.
      * @param {function()} failureCallback The function to call if create banner
@@ -50,7 +53,8 @@ var admob =  {
         var defaults = {
             'publisherId': undefined,
             'adSize': undefined,
-            'positionAtTop': false
+            'positionAtTop': false,
+            'positionFromTop': -1
         };
         var requiredOptions = ['publisherId', 'adSize'];
         
@@ -75,7 +79,8 @@ var admob =  {
             failureCallback,
             'AdMobPlugin',
             'createBannerView',
-            [{publisherId:defaults['publisherId'], adSize:defaults['adSize'], positionAtTop:defaults['positionAtTop']}]
+            [{publisherId:defaults['publisherId'], adSize:defaults['adSize'], positionAtTop:defaults['positionAtTop'],
+             positionFromTop:defaults['positionFromTop']}]
         );
     }, 
     
