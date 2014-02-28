@@ -42,6 +42,7 @@ public class AdMobPlugin extends CordovaPlugin {
 	public static final String ACTION_CREATE_INTERSTITIAL_VIEW = "createInterstitialView";
 	public static final String ACTION_REQUEST_AD = "requestAd";
 	public static final String KILL_AD = "killAd";
+	public static final String SHOW_AD = "showAd";
 
 	/**
 	 * This is the main method for the AdMob plugin. All API calls go through
@@ -72,6 +73,9 @@ public class AdMobPlugin extends CordovaPlugin {
 			return true;
 		} else if (KILL_AD.equals(action)) {
 			executeKillAd(callbackContext);
+			return true;
+		} else if (SHOW_AD.equals(action)) {
+			executeShowAd(inputs,callbackContext);
 			return true;
 		} else {
 			Log.d(LOGTAG, String.format("Invalid action passed: %s", action));
@@ -364,6 +368,33 @@ public class AdMobPlugin extends CordovaPlugin {
 	        };
 
         	this.cordova.getActivity().runOnUiThread(runnable);
+	}
+	
+	
+	private void executeShowAd(JSONArray inputs,final  CallbackContext callbackContext) {
+		final boolean show;
+		if(adView!=null){
+		    // Get the input data.
+		    try {
+		        show = inputs.getBoolean( 0 ); 
+		        cordova.getActivity().runOnUiThread(new Runnable() {
+                    public void run() {                       
+                    	 if (show) {
+          					adView.setVisibility(View.VISIBLE);
+          				} else {
+          					adView.setVisibility(View.GONE);
+          				}
+          		        callbackContext.success();
+                    }
+                });
+		    } catch (JSONException exception) {
+		      Log.w(LOGTAG, String.format("Got JSON Exception: %s", exception.getMessage()));
+		      callbackContext.error("errInput");
+		    }
+		}else{
+			callbackContext.error("errAdViewNull");
+		}
+	    
 	}
 
 	/**
