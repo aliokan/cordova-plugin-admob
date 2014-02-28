@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.view.View;
 
 import com.google.ads.Ad;
 import com.google.ads.AdListener;
