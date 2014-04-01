@@ -145,11 +145,11 @@
         [self.bannerView removeFromSuperview];
         self.bannerView = nil;
         // Frame of the main Cordova webview.
-        CGRect webViewFrame = self.webView.frame;
+        //CGRect webViewFrame = self.webView.frame;
         // Frame of the main container view that holds the Cordova webview.
-        CGRect superViewFrame = self.webView.superview.frame;
+        /*CGRect superViewFrame = self.webView.superview.frame;
         webViewFrame.size.height = superViewFrame.size.height;
-        self.webView.frame = webViewFrame;
+        self.webView.frame = webViewFrame;*/
     } else if(self.interstitial){
         //[self.interstitial setDelegate:nil];
         //[self.interstitial removeFromSuperview];
@@ -196,16 +196,26 @@
 
 - (void)createGADBannerViewWithPubId:(NSString *)pubId
                           bannerType:(GADAdSize)adSize {
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenHeight = screenRect.size.height;
+    
+    
     self.bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
+    [self.bannerView setCenter:CGPointMake(kGADAdSizeBanner.size.width/2, screenHeight - kGADAdSizeBanner.size.height/2)];
     self.bannerView.adUnitID = pubId;
-    self.bannerView.delegate = self;
+    //self.bannerView.delegate = self;
     self.bannerView.rootViewController = self.viewController;
+    [self.viewController.view addSubview:self.bannerView];
+    GADRequest *request = [GADRequest request];
+    [self.bannerView loadRequest:request];
 }
 
 - (void)createGADInterstitialWithPubId:(NSString *)pubId {
     self.interstitial = [[GADInterstitial alloc] init];
     self.interstitial.adUnitID = pubId;
     self.interstitial.delegate = self;
+    GADRequest *request = [GADRequest request];
+    [self.interstitial loadRequest:request];
 }
 
 - (void)requestAdWithTesting:(BOOL)isTesting
@@ -331,7 +341,7 @@
 }
 
 - (void)deviceOrientationChange:(NSNotification *)notification {
-    [self resizeViews];
+    //[self resizeViews];
 }
 
 #pragma mark GADBannerViewDelegate implementation
