@@ -198,10 +198,11 @@
                           bannerType:(GADAdSize)adSize {
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenHeight = screenRect.size.height;
+    CGFloat screenWidth = screenRect.size.width;
     
     
     self.bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
-    [self.bannerView setCenter:CGPointMake(kGADAdSizeBanner.size.width/2, screenHeight - kGADAdSizeBanner.size.height/2)];
+    [self.bannerView setCenter:CGPointMake(adSize.size.width/2 - (adSize.size.width-screenWidth)/2, screenHeight - adSize.size.height/2)];
     self.bannerView.adUnitID = pubId;
     //self.bannerView.delegate = self;
     self.bannerView.rootViewController = self.viewController;
