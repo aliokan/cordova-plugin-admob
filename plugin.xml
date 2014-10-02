@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="com.google.cordova.plugin.AdMobPlugin"
-        version="0.0.">
+        version="0.0.4">
     
     <name>AdMobPlugin</name>
     <description>Google AdMob Plugin</description>
