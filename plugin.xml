@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="com.google.cordova.plugin.AdMobPlugin"
-        version="0.0.3">
+        version="0.0.">
     
     <name>AdMobPlugin</name>
     <description>Google AdMob Plugin</description>
@@ -16,10 +16,9 @@
         <clobbers target="window.admob"/>
     </js-module>
     
-    
     <!-- android -->
     <platform name="android">
-        <dependency id="com.google.playservices" version=">=19.0.0"/>
+        <dependency id="com.google.playservices" version="19.0.0"/>
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="AdMobPlugin" >
                 <param name="android-package" value="com.google.cordova.plugin.AdMobPlugin"/>
@@ -38,6 +37,7 @@
     </platform>
     <!-- ios -->
     <platform name="ios">
+        <dependency id="com.google.admobsdk-ios" version="6.12.0"/>
         <config-file target="config.xml" parent="/*">
             <feature name="AdMobPlugin">
                 <param name="ios-package" value="AdMobPlugin" />
@@ -46,20 +46,6 @@
         
         <header-file src="src/ios/AdMobPlugin.h" />
         <source-file src="src/ios/AdMobPlugin.m" />
-        
-        <!-- Google AdMob header files -->
-        <header-file src="src/ios/GADAdMobExtras.h" />
-        <header-file src="src/ios/GADAdNetworkExtras.h" />
-        <header-file src="src/ios/GADAdSize.h" />
-        <header-file src="src/ios/GADBannerView.h" />
-        <header-file src="src/ios/GADBannerViewDelegate.h" />
-        <header-file src="src/ios/GADInterstitial.h" />
-        <header-file src="src/ios/GADInterstitialDelegate.h" />
-        <header-file src="src/ios/GADRequest.h" />
-        <header-file src="src/ios/GADRequestError.h" />
-        
-        <!-- Google AdMob 6.5.1 framework -->
-        <source-file src="src/ios/libGoogleAdMobAds.a" framework="true" />
         
         <!-- iOS development frameworks need by Google AdMob 6.5.1 framework -->
         <framework src="StoreKit.framework" />
