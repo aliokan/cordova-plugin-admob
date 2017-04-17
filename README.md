@@ -9,7 +9,7 @@ http://docs.phonegap.com/en/edge/guide_cli_index.md.html#The%20Command-line%20In
 How to install plugin whith phonegap CLI : 
 > phonegap local plugin add https://github.com/aliokan/cordova-plugin-admob
 
-##Implementation:
+## Implementation:
 
 There are two calls needed to get AdMob Ads:
 
