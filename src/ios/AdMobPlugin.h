@@ -2,20 +2,19 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import "GADBannerView.h"
+#import "GADInterstitial.h"
 #import "GADBannerViewDelegate.h"
 #import "GADInterstitialDelegate.h"
 
-@class GADBannerView;
-@class GADInterstitial;
+#pragma mark DFP Plugin
 
-#pragma mark AdMob Plugin
-
-// This version of the AdMob plugin has been tested with Cordova version 3.0.0.
+// This version of the DFP plugin has been tested with Cordova version 3.0.0.
 @interface AdMobPlugin : CDVPlugin <GADBannerViewDelegate, GADInterstitialDelegate> {
- @private
-  // Value set by the javascript to indicate whether the ad is to be positioned
-  // at the top or bottom of the screen.
-  BOOL positionAdAtTop_;
+    @private
+    // Value set by the javascript to indicate whether the ad is to be positioned
+    // at the top or bottom of the screen.
+    BOOL positionAdAtTop_;
 }
 
 @property(nonatomic, retain) GADBannerView *bannerView;
