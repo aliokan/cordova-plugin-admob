@@ -190,7 +190,18 @@ var admob =  {
             failureCallback,
             'AdMobPlugin',
                      'killAd',[{}]);
-    }
+    },
+    
+    
+    showAd :function( show, successCallback, failureCallback) {
+		if (show === undefined) {
+			show = true;
+		}else{
+			show=!!show;
+		}
+		cordova.exec(successCallback,failureCallback,'AdMobPlugin','showAd', 	[ show ]);
+	}
+    
     
 };
 
