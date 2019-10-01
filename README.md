@@ -6,7 +6,7 @@ compatible Phonegap 3.0 CLI
 
 What is phonegap CLI ?  
 http://docs.phonegap.com/en/edge/guide_cli_index.md.html#The%20Command-line%20Interface  
-How to install plugin whith phonegap CLI : 
+How to install plugin with phonegap CLI : 
 > phonegap local plugin add https://github.com/aliokan/cordova-plugin-admob
 
 ## Implementation:
